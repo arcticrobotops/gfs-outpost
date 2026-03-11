@@ -99,12 +99,17 @@ export default function FeedLayout({
       <main className="mx-auto max-w-7xl px-4 py-8 sm:py-10">
         {/* Page header */}
         <div className="mb-8 text-center">
-          <p className="font-data text-[10px] tracking-[0.25em] text-copper uppercase mb-2">
-            Station 45&deg;N Inventory
-          </p>
+          <div className="flex items-center gap-3 justify-center mb-3">
+            <div className="h-px w-8 sm:w-12 bg-copper" />
+            <p className="font-data text-[10px] tracking-[0.25em] text-copper uppercase">
+              Station 45&deg;N Inventory
+            </p>
+            <div className="h-px w-8 sm:w-12 bg-copper" />
+          </div>
           <h2 className="font-display text-2xl sm:text-3xl font-semibold text-forest tracking-wide">
             Current Stock
           </h2>
+          <div className="mt-3 mx-auto w-12 h-px bg-forest/20" />
         </div>
 
         {/* Loading state */}
