@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { ShopifyProduct } from '@/types/shopify';
 
 interface ProductCardProps {
@@ -14,10 +15,8 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const itemNo = String(index + 1).padStart(3, '0');
 
   return (
-    <a
-      href={product.onlineStoreUrl || `#${product.handle}`}
-      target={product.onlineStoreUrl ? '_blank' : undefined}
-      rel={product.onlineStoreUrl ? 'noopener noreferrer' : undefined}
+    <Link
+      href={`/products/${product.handle}`}
       className="group block"
     >
       <article className="border-[2.5px] border-forest bg-linen transition-colors duration-200 group-hover:border-copper overflow-hidden">
@@ -58,6 +57,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           </h3>
         </div>
       </article>
-    </a>
+    </Link>
   );
 }
