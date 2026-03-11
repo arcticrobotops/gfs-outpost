@@ -4,7 +4,7 @@ const COOKIE_NAME = 'site-auth';
 
 export function middleware(request: NextRequest) {
   // Skip auth routes
-  if (request.nextUrl.pathname.startsWith('/__auth')) {
+  if (request.nextUrl.pathname.startsWith('/api/auth')) {
     return NextResponse.next();
   }
 
@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Redirect to login
-  const loginUrl = new URL('/__auth', request.url);
+  const loginUrl = new URL('/api/auth', request.url);
   loginUrl.searchParams.set('next', request.nextUrl.pathname);
   return NextResponse.redirect(loginUrl);
 }

@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 30, // 30 days
+        maxAge: 60 * 60 * 24 * 30,
       });
       return response;
     }
@@ -114,7 +114,7 @@ function loginHTML(next: string, error?: string) {
     <p class="brand">Ghost Forest Surf Club</p>
     <h1>Enter Password</h1>
     ${error ? `<p class="error">${error}</p>` : ''}
-    <form method="POST" action="/__auth">
+    <form method="POST" action="/api/auth">
       <input type="hidden" name="next" value="${next}" />
       <input type="password" name="password" placeholder="Password" autofocus required />
       <button type="submit">Enter</button>
