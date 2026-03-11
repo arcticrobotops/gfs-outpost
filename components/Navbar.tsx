@@ -21,7 +21,7 @@ export default function Navbar({
       {/* Top stripe */}
       <div className="bg-forest">
         <div className="mx-auto max-w-7xl px-4">
-          <p className="py-1.5 text-center font-data text-[11px] tracking-[0.2em] text-copper uppercase">
+          <p className="py-1.5 text-center font-data text-xs tracking-[0.2em] text-copper uppercase">
             Est. 2024 &mdash; Neskowin, OR
           </p>
         </div>
@@ -34,7 +34,7 @@ export default function Navbar({
             {/* Menu button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex items-center gap-1.5 font-data text-[11px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
+              className="flex items-center gap-1.5 font-data text-xs tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
               aria-label="Toggle menu"
             >
               <svg
@@ -61,7 +61,7 @@ export default function Navbar({
 
             {/* Bag button */}
             <button
-              className="flex items-center gap-1.5 font-data text-[11px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
+              className="flex items-center gap-1.5 font-data text-xs tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
               aria-label="Shopping bag"
             >
               <span className="hidden sm:inline">Bag</span>
@@ -89,7 +89,7 @@ export default function Navbar({
       <div className="bg-linen border-b-2 border-forest/20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide">
-            <span className="shrink-0 font-data text-[11px] tracking-[0.2em] text-sage uppercase mr-1 hidden sm:inline">
+            <span className="shrink-0 font-data text-xs tracking-[0.2em] text-sage uppercase mr-1 hidden sm:inline">
               Filter:
             </span>
             <FilterPill
@@ -147,7 +147,7 @@ function FilterPill({
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 rounded-full px-4 py-1.5 font-data text-[11px] tracking-[0.12em] uppercase transition-all
+      className={`shrink-0 rounded-full px-4 py-1.5 font-data text-xs tracking-[0.12em] uppercase transition-all
         ${
           active
             ? 'bg-forest text-linen'

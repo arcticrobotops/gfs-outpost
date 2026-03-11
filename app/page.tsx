@@ -1,5 +1,7 @@
 import { getProducts, getCollections } from '@/lib/shopify';
 import FeedLayout from '@/components/FeedLayout';
+import HeroSection from '@/components/HeroSection';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export const revalidate = 60;
 
@@ -18,5 +20,12 @@ export default async function Home() {
     console.error('Failed to fetch from Shopify:', error);
   }
 
-  return <FeedLayout initialProducts={products} collections={collections} />;
+  return (
+    <>
+      <ErrorBoundary>
+        <HeroSection />
+      </ErrorBoundary>
+      <FeedLayout initialProducts={products} collections={collections} />
+    </>
+  );
 }

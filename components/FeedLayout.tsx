@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 import ProductCard from './ProductCard';
 import EditorialCard, { getEditorialByIndex } from './EditorialCard';
 import TextMoment, { getTextMomentByIndex } from './TextMoment';
-import Footer from './Footer';
+import ErrorBoundary from './ErrorBoundary';
 
 interface FeedLayoutProps {
   initialProducts: ShopifyProduct[];
@@ -58,31 +58,33 @@ export default function FeedLayout({
   let textMomentCount = 0;
 
   products.forEach((product, i) => {
-    // Insert editorial every 4 products
     if (i > 0 && i % 4 === 0) {
       const editorial = getEditorialByIndex(editorialCount);
       feedItems.push(
         <div key={`editorial-${editorialCount}`} className="feed-item">
-          <EditorialCard
-            imageUrl={editorial.imageUrl}
-            alt={editorial.alt}
-            caption={editorial.caption}
-          />
+          <ErrorBoundary>
+            <EditorialCard
+              imageUrl={editorial.imageUrl}
+              alt={editorial.alt}
+              caption={editorial.caption}
+            />
+          </ErrorBoundary>
         </div>,
       );
       editorialCount++;
     }
 
-    // Insert text moment every 7 products
     if (i > 0 && i % 7 === 0) {
       const moment = getTextMomentByIndex(textMomentCount);
       feedItems.push(
         <div key={`moment-${textMomentCount}`} className="feed-item">
-          <TextMoment
-            header={moment.header}
-            body={moment.body}
-            variant={moment.variant}
-          />
+          <ErrorBoundary>
+            <TextMoment
+              header={moment.header}
+              body={moment.body}
+              variant={moment.variant}
+            />
+          </ErrorBoundary>
         </div>,
       );
       textMomentCount++;
@@ -90,25 +92,29 @@ export default function FeedLayout({
 
     feedItems.push(
       <div key={product.id} className="feed-item">
-        <ProductCard product={product} index={i} />
+        <ErrorBoundary>
+          <ProductCard product={product} index={i} />
+        </ErrorBoundary>
       </div>,
     );
   });
 
   return (
     <div className="min-h-screen bg-linen">
-      <Navbar
-        collections={collections}
-        activeCollection={activeCollection}
-        onCollectionChange={setActiveCollection}
-      />
+      <ErrorBoundary>
+        <Navbar
+          collections={collections}
+          activeCollection={activeCollection}
+          onCollectionChange={setActiveCollection}
+        />
+      </ErrorBoundary>
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:py-10">
+      <main id="inventory" className="mx-auto max-w-7xl px-4 py-8 sm:py-10">
         {/* Page header */}
         <div className="mb-8 text-center">
           <div className="flex items-center gap-3 justify-center mb-3">
             <div className="h-px w-8 sm:w-12 bg-copper" />
-            <p className="font-data text-[11px] tracking-[0.25em] text-copper uppercase">
+            <p className="font-data text-xs tracking-[0.25em] text-copper uppercase">
               Station 45&deg;N Inventory
             </p>
             <div className="h-px w-8 sm:w-12 bg-copper" />
@@ -122,7 +128,7 @@ export default function FeedLayout({
         {/* Loading state */}
         {loading && (
           <div className="border-[2.5px] border-forest p-6 sm:p-8">
-            <p className="font-data text-[11px] tracking-[0.25em] text-copper uppercase mb-6 text-center animate-pulse">
+            <p className="font-data text-xs tracking-[0.25em] text-copper uppercase mb-6 text-center animate-pulse">
               Transmitting...
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
@@ -147,7 +153,7 @@ export default function FeedLayout({
             <div className="w-8 h-8 mb-4 flex items-center justify-center border-2 border-red-700/40 rounded-full">
               <span className="text-red-700 font-data text-sm font-bold">!</span>
             </div>
-            <p className="font-data text-[11px] tracking-[0.2em] text-red-700/70 uppercase mb-2">
+            <p className="font-data text-xs tracking-[0.2em] text-red-700/70 uppercase mb-2">
               Signal Lost
             </p>
             <p className="font-body text-sm text-slate mb-6">
@@ -155,7 +161,7 @@ export default function FeedLayout({
             </p>
             <button
               onClick={() => fetchFiltered(activeCollection)}
-              className="font-data text-[11px] tracking-[0.25em] uppercase px-6 py-2.5 border-[2px] border-forest text-forest hover:bg-forest hover:text-linen transition-colors duration-200"
+              className="font-data text-xs tracking-[0.25em] uppercase px-6 py-2.5 border-[2px] border-forest text-forest hover:bg-forest hover:text-linen transition-colors duration-200"
             >
               Retry Transmission
             </button>
@@ -181,8 +187,6 @@ export default function FeedLayout({
           </div>
         )}
       </main>
-
-      <Footer />
     </div>
   );
 }
