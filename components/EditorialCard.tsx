@@ -34,9 +34,9 @@ export default function EditorialCard({
   caption,
 }: EditorialCardProps) {
   return (
-    <article className="border-[2.5px] border-forest bg-linen overflow-hidden">
+    <article className="group border-[2.5px] border-forest bg-linen overflow-hidden transition-colors duration-200 hover:border-copper">
       {/* Dispatch header */}
-      <div className="px-3 py-2 border-b border-forest/10">
+      <div className="px-3 py-2 border-b border-forest/10 transition-colors duration-200 group-hover:border-copper/30">
         <p className="font-data text-[10px] tracking-[0.2em] text-copper uppercase">
           Dispatch
         </p>
@@ -49,7 +49,7 @@ export default function EditorialCard({
           alt={alt}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover"
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </div>
 

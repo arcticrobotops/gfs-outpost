@@ -40,7 +40,7 @@ export default function TextMoment({
 
   return (
     <article
-      className={`border-[2.5px] p-5 sm:p-6 ${
+      className={`group border-[2.5px] p-5 sm:p-6 transition-colors duration-200 hover:border-copper ${
         isForest
           ? 'bg-forest border-forest text-linen'
           : 'bg-linen border-forest text-forest'
