@@ -43,20 +43,16 @@ export default function TextMoment({
       className={`group border-[2.5px] p-5 sm:p-6 transition-colors duration-200 hover:border-copper ${
         isForest
           ? 'bg-forest border-forest text-linen'
-          : 'bg-linen border-forest text-forest'
+          : 'bg-linen border-forest text-forest border-t-copper border-t-[2px]'
       }`}
     >
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
-        <div className={`h-px flex-1 ${isForest ? 'bg-copper' : 'bg-copper'}`} />
-        <h3
-          className={`font-data text-[11px] tracking-[0.2em] uppercase shrink-0 ${
-            isForest ? 'text-copper' : 'text-copper'
-          }`}
-        >
+        <div className="h-px flex-1 bg-copper" />
+        <h3 className="font-data text-[11px] tracking-[0.2em] uppercase shrink-0 text-copper">
           {header}
         </h3>
-        <div className={`h-px flex-1 ${isForest ? 'bg-copper' : 'bg-copper'}`} />
+        <div className="h-px flex-1 bg-copper" />
       </div>
 
       {/* Body */}
