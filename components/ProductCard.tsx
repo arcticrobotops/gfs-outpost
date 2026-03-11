@@ -41,11 +41,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         </div>
 
         {/* Data bar */}
-        <div className="bg-forest px-3 py-2">
-          <p className="font-data text-[10px] tracking-[0.15em] text-linen/90 uppercase">
+        <div className="bg-forest px-3 py-2 overflow-hidden">
+          <p className="font-data text-[10px] tracking-[0.15em] text-linen/90 uppercase whitespace-nowrap overflow-hidden text-ellipsis">
             No. {itemNo}
             <span className="mx-1.5 text-copper/60">|</span>
-            {collection}
+            <span className="truncate">{collection}</span>
             <span className="mx-1.5 text-copper/60">|</span>
             <span className="text-copper font-medium">${Math.round(price)}</span>
           </p>
