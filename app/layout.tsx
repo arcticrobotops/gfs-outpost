@@ -35,13 +35,23 @@ export const metadata: Metadata = {
     "Ghost Forest",
     "surf club",
     "outerwear",
+    "Pacific Northwest",
   ],
   openGraph: {
     title: "Ghost Forest Surf Club — Outpost",
     description:
       "Coldwater surf goods from Station 45°N. Neskowin, Oregon. Est. 2024.",
     type: "website",
+    siteName: "Ghost Forest Surf Club",
+    locale: "en_US",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ghost Forest Surf Club — Outpost",
+    description:
+      "Coldwater surf goods from Station 45°N. Neskowin, Oregon. Est. 2024.",
+  },
+  metadataBase: new URL("https://ghostforestsurfclub.com"),
 };
 
 export default function RootLayout({
