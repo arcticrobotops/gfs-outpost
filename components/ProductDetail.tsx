@@ -43,7 +43,7 @@ export default function ProductDetail({
       {hasVariants && (
         <div className="border-[2.5px] border-forest/30">
           <div className="bg-forest/5 px-4 py-2 border-b border-forest/15">
-            <h3 className="font-data text-[11px] tracking-[0.25em] text-forest/60 uppercase">
+            <h3 className="font-data text-xs tracking-[0.25em] text-forest/60 uppercase">
               Select Option
             </h3>
           </div>
@@ -57,7 +57,7 @@ export default function ProductDetail({
                   }
                 }}
                 disabled={!v.node.availableForSale}
-                className={`font-data text-[11px] tracking-wider px-3 py-1.5 border transition-colors duration-150 ${
+                className={`font-data text-xs tracking-wider px-3 py-1.5 border transition-colors duration-150 ${
                   v.node.id === selectedVariant
                     ? 'border-copper bg-copper/10 text-copper font-medium'
                     : v.node.availableForSale
@@ -78,7 +78,7 @@ export default function ProductDetail({
           ${currentPrice.toFixed(2)}
         </span>
         {!isAvailable && selectedVariant && (
-          <span className="font-data text-[11px] tracking-wider text-red-700/70 uppercase">
+          <span className="font-data text-xs tracking-wider text-red-700/70 uppercase">
             Unavailable
           </span>
         )}
@@ -90,7 +90,7 @@ export default function ProductDetail({
           href={shopifyUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`block w-full font-data text-[11px] tracking-[0.25em] uppercase text-center py-4 border-[2.5px] transition-colors duration-200 ${
+          className={`block w-full font-data text-xs tracking-[0.25em] uppercase text-center py-4 border-[2.5px] transition-colors duration-200 ${
             isAvailable
               ? 'bg-forest text-linen border-forest hover:bg-copper hover:border-copper'
               : 'bg-forest/20 text-forest/40 border-forest/20 cursor-not-allowed pointer-events-none'
@@ -104,7 +104,7 @@ export default function ProductDetail({
       {shopifyUrl && (
         <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-linen border-t-[2.5px] border-forest px-4 py-3 flex items-center gap-3">
           <div className="flex-1 min-w-0">
-            <p className="font-data text-[11px] tracking-wider text-forest/60 uppercase truncate">
+            <p className="font-data text-xs tracking-wider text-forest/60 uppercase truncate">
               {isAvailable ? 'Ready to ship' : 'Unavailable'}
             </p>
             <p className="font-data text-sm tracking-wider text-copper font-medium">
@@ -115,7 +115,7 @@ export default function ProductDetail({
             href={shopifyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`shrink-0 font-data text-[11px] tracking-[0.2em] uppercase px-6 py-3 border-[2px] transition-colors duration-200 ${
+            className={`shrink-0 font-data text-xs tracking-[0.2em] uppercase px-6 py-3 border-[2px] transition-colors duration-200 ${
               isAvailable
                 ? 'bg-forest text-linen border-forest hover:bg-copper hover:border-copper'
                 : 'bg-forest/20 text-forest/40 border-forest/20 pointer-events-none'

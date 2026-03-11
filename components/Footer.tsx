@@ -6,7 +6,7 @@ export default function Footer() {
           {/* Decorative frame around station ID block */}
           <div className="border border-copper/25 px-10 py-8 sm:px-16 sm:py-10">
             {/* Station ID header */}
-            <p className="font-data text-[11px] tracking-[0.25em] text-copper uppercase mb-6">
+            <p className="font-data text-xs tracking-[0.25em] text-copper uppercase mb-6">
               Station ID
             </p>
 
@@ -20,10 +20,10 @@ export default function Footer() {
 
             {/* Station data */}
             <div className="space-y-1.5">
-              <p className="font-data text-[11px] tracking-[0.15em] text-linen/70 uppercase">
+              <p className="font-data text-xs tracking-[0.15em] text-linen/70 uppercase">
                 Est. 2024 / 45.10&deg;N, 123.98&deg;W
               </p>
-              <p className="font-data text-[11px] tracking-[0.15em] text-linen/70 uppercase">
+              <p className="font-data text-xs tracking-[0.15em] text-linen/70 uppercase">
                 Neskowin, Oregon
               </p>
             </div>
@@ -36,7 +36,7 @@ export default function Footer() {
                 <a
                   key={link}
                   href="#"
-                  className="font-data text-[11px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
+                  className="font-data text-xs tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
                 >
                   {link}
                 </a>
@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
 
           {/* Copyright */}
-          <p className="mt-6 font-data text-[11px] tracking-[0.1em] text-linen/30 uppercase">
+          <p className="mt-6 font-data text-xs tracking-[0.1em] text-linen/30 uppercase">
             &copy; 2024 Ghost Forest Surf Club. All rights reserved.
           </p>
         </div>

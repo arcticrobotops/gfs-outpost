@@ -107,11 +107,11 @@ export default async function ProductPage({
             <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
               <Link
                 href="/"
-                className="font-data text-[11px] tracking-[0.2em] text-forest/70 uppercase hover:text-copper transition-colors"
+                className="font-data text-xs tracking-[0.2em] text-forest/70 uppercase hover:text-copper transition-colors"
               >
                 &larr; Back to Outpost
               </Link>
-              <span className="font-data text-[11px] tracking-[0.25em] text-forest/40 uppercase">
+              <span className="font-data text-xs tracking-[0.25em] text-forest/40 uppercase">
                 GFS Outpost
               </span>
             </div>
@@ -120,7 +120,7 @@ export default async function ProductPage({
           <div className="mx-auto max-w-6xl px-4 py-8 md:py-12">
             {/* Section header */}
             <div className="mb-8 border-b-[2.5px] border-forest pb-3">
-              <h1 className="font-data text-[11px] tracking-[0.3em] text-forest/50 uppercase">
+              <h1 className="font-data text-xs tracking-[0.3em] text-forest/50 uppercase">
                 Inventory Detail
               </h1>
             </div>
@@ -151,7 +151,7 @@ export default async function ProductPage({
 
                 {/* Data bar under image */}
                 <div className="bg-forest px-4 py-2.5">
-                  <p className="font-data text-[11px] tracking-[0.15em] text-linen/90 uppercase">
+                  <p className="font-data text-xs tracking-[0.15em] text-linen/90 uppercase">
                     No. 001
                     <span className="mx-2 text-copper/60">|</span>
                     {collection}
@@ -198,7 +198,7 @@ export default async function ProductPage({
                       {product.tags.slice(0, 5).map((tag) => (
                         <span
                           key={tag}
-                          className="font-data text-[11px] tracking-[0.15em] text-forest/50 uppercase border border-forest/20 px-2 py-0.5"
+                          className="font-data text-xs tracking-[0.15em] text-forest/50 uppercase border border-forest/20 px-2 py-0.5"
                         >
                           {tag}
                         </span>
@@ -210,7 +210,7 @@ export default async function ProductPage({
                 {/* Detail grid */}
                 <div className="border-[2.5px] border-forest">
                   <div className="bg-forest px-4 py-2">
-                    <h3 className="font-data text-[11px] tracking-[0.25em] text-linen/80 uppercase">
+                    <h3 className="font-data text-xs tracking-[0.25em] text-linen/80 uppercase">
                       Field Report
                     </h3>
                   </div>
@@ -251,7 +251,7 @@ export default async function ProductPage({
                 {/* Description / Dispatch Notes */}
                 {product.description && (
                   <div>
-                    <h3 className="font-data text-[11px] tracking-[0.25em] text-forest/50 uppercase mb-3 pb-2 border-b border-forest/15">
+                    <h3 className="font-data text-xs tracking-[0.25em] text-forest/50 uppercase mb-3 pb-2 border-b border-forest/15">
                       Dispatch Notes
                     </h3>
                     {product.descriptionHtml ? (
@@ -268,7 +268,7 @@ export default async function ProductPage({
                 )}
 
                 {/* Secondary info */}
-                <p className="font-data text-[11px] tracking-[0.15em] text-forest/30 uppercase">
+                <p className="font-data text-xs tracking-[0.15em] text-forest/30 uppercase">
                   All orders fulfilled via Ghost Forest Surf Club Shopify.
                   Free shipping on orders over $150.
                 </p>
@@ -294,11 +294,11 @@ function DetailRow({
 }) {
   return (
     <div className="flex items-center justify-between px-4 py-2.5">
-      <span className="font-data text-[11px] tracking-[0.2em] text-forest/50 uppercase">
+      <span className="font-data text-xs tracking-[0.2em] text-forest/50 uppercase">
         {label}
       </span>
       <span
-        className={`font-data text-[11px] tracking-wider text-right ${
+        className={`font-data text-xs tracking-wider text-right ${
           highlight
             ? 'text-copper font-medium'
             : status === 'available'
