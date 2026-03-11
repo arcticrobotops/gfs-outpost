@@ -41,16 +41,13 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         </div>
 
         {/* Data bar */}
-        <div className="bg-forest px-3 py-2 transition-colors duration-200 group-hover:bg-forest">
-          <p className="font-data text-[10px] tracking-[0.15em] text-linen/90 uppercase flex items-center justify-between">
-            <span className="truncate">
-              No. {itemNo}
-              <span className="mx-1.5 text-copper inline-block transition-colors group-hover:text-copper">|</span>
-              {collection}
-            </span>
-            <span className="shrink-0 text-copper font-medium">
-              ${Math.round(price)}
-            </span>
+        <div className="bg-forest px-3 py-2">
+          <p className="font-data text-[10px] tracking-[0.15em] text-linen/90 uppercase">
+            No. {itemNo}
+            <span className="mx-1.5 text-copper/60">|</span>
+            {collection}
+            <span className="mx-1.5 text-copper/60">|</span>
+            <span className="text-copper font-medium">${Math.round(price)}</span>
           </p>
         </div>
 
