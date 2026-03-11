@@ -109,9 +109,22 @@ export default function FeedLayout({
 
         {/* Loading state */}
         {loading && (
-          <div className="flex justify-center py-20">
-            <div className="font-data text-xs tracking-[0.2em] text-sage uppercase animate-pulse">
-              Loading inventory...
+          <div className="border-[2.5px] border-forest p-6 sm:p-8">
+            <p className="font-data text-[10px] tracking-[0.25em] text-copper uppercase mb-6 text-center animate-pulse">
+              Transmitting...
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="border border-forest/20">
+                  <div className="aspect-[3/4] bg-sage/10 animate-pulse" />
+                  <div className="bg-forest/5 px-3 py-2">
+                    <div className="h-2.5 bg-forest/10 rounded-sm w-3/4" />
+                  </div>
+                  <div className="px-3 py-3">
+                    <div className="h-3 bg-forest/10 rounded-sm w-1/2" />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
