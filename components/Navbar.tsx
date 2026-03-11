@@ -86,9 +86,12 @@ export default function Navbar({
       </div>
 
       {/* Category filter bar */}
-      <div className="bg-linen border-b border-forest/10">
+      <div className="bg-linen border-b-2 border-forest/20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide">
+            <span className="shrink-0 font-data text-[9px] tracking-[0.2em] text-sage uppercase mr-1 hidden sm:inline">
+              Filter:
+            </span>
             <FilterPill
               label="All"
               active={activeCollection === 'all'}
