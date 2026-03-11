@@ -41,7 +41,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
         {/* Data bar */}
         <div className="bg-forest px-3 py-2 overflow-hidden">
-          <p className="font-data text-[10px] tracking-[0.15em] text-linen/90 uppercase whitespace-nowrap overflow-hidden text-ellipsis">
+          <p className="font-data text-[11px] tracking-[0.15em] text-linen/90 uppercase whitespace-nowrap overflow-hidden text-ellipsis">
             No. {itemNo}
             <span className="mx-1.5 text-copper/60">|</span>
             <span className="truncate">{collection}</span>

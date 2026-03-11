@@ -58,8 +58,45 @@ export default async function ProductPage({
   const hasVariants = product.variants.edges.length > 1;
   const anyAvailable = product.variants.edges.some((v) => v.node.availableForSale);
 
+  // Build JSON-LD structured data
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description || `${product.title}. Coldwater surf goods from Station 45°N.`,
+    image: images.map((img) => img.url),
+    brand: {
+      '@type': 'Brand',
+      name: 'Ghost Forest Surf Club',
+    },
+    ...(product.onlineStoreUrl && { url: product.onlineStoreUrl }),
+    offers: hasVariants
+      ? {
+          '@type': 'AggregateOffer',
+          lowPrice: price.toFixed(2),
+          highPrice: maxPrice.toFixed(2),
+          priceCurrency: product.priceRange.minVariantPrice.currencyCode,
+          availability: anyAvailable
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          offerCount: product.variants.edges.length,
+        }
+      : {
+          '@type': 'Offer',
+          price: price.toFixed(2),
+          priceCurrency: product.priceRange.minVariantPrice.currencyCode,
+          availability: anyAvailable
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+        },
+  };
+
   return (
     <main className="min-h-screen bg-linen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Top nav bar */}
       <nav className="border-b-[2.5px] border-forest bg-forest/[0.03]">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
@@ -69,7 +106,7 @@ export default async function ProductPage({
           >
             &larr; Back to Outpost
           </Link>
-          <span className="font-data text-[10px] tracking-[0.25em] text-forest/40 uppercase">
+          <span className="font-data text-[11px] tracking-[0.25em] text-forest/40 uppercase">
             GFS Outpost
           </span>
         </div>
@@ -110,7 +147,7 @@ export default async function ProductPage({
 
             {/* Data bar under image */}
             <div className="bg-forest px-4 py-2.5">
-              <p className="font-data text-[10px] tracking-[0.15em] text-linen/90 uppercase">
+              <p className="font-data text-[11px] tracking-[0.15em] text-linen/90 uppercase">
                 No. 001
                 <span className="mx-2 text-copper/60">|</span>
                 {collection}
@@ -157,7 +194,7 @@ export default async function ProductPage({
                   {product.tags.slice(0, 5).map((tag) => (
                     <span
                       key={tag}
-                      className="font-data text-[9px] tracking-[0.15em] text-forest/50 uppercase border border-forest/20 px-2 py-0.5"
+                      className="font-data text-[11px] tracking-[0.15em] text-forest/50 uppercase border border-forest/20 px-2 py-0.5"
                     >
                       {tag}
                     </span>
@@ -169,7 +206,7 @@ export default async function ProductPage({
             {/* Detail grid */}
             <div className="border-[2.5px] border-forest">
               <div className="bg-forest px-4 py-2">
-                <h3 className="font-data text-[10px] tracking-[0.25em] text-linen/80 uppercase">
+                <h3 className="font-data text-[11px] tracking-[0.25em] text-linen/80 uppercase">
                   Field Report
                 </h3>
               </div>
@@ -201,7 +238,7 @@ export default async function ProductPage({
             {hasVariants && (
               <div className="border-[2.5px] border-forest/30">
                 <div className="bg-forest/5 px-4 py-2 border-b border-forest/15">
-                  <h3 className="font-data text-[10px] tracking-[0.25em] text-forest/60 uppercase">
+                  <h3 className="font-data text-[11px] tracking-[0.25em] text-forest/60 uppercase">
                     Available Options
                   </h3>
                 </div>
@@ -209,7 +246,7 @@ export default async function ProductPage({
                   {product.variants.edges.map((v) => (
                     <span
                       key={v.node.id}
-                      className={`font-data text-[10px] tracking-wider px-3 py-1.5 border ${
+                      className={`font-data text-[11px] tracking-wider px-3 py-1.5 border ${
                         v.node.availableForSale
                           ? 'border-forest/30 text-forest/80'
                           : 'border-forest/10 text-forest/30 line-through'
@@ -225,7 +262,7 @@ export default async function ProductPage({
             {/* Description / Dispatch Notes */}
             {product.description && (
               <div>
-                <h3 className="font-data text-[10px] tracking-[0.25em] text-forest/50 uppercase mb-3 pb-2 border-b border-forest/15">
+                <h3 className="font-data text-[11px] tracking-[0.25em] text-forest/50 uppercase mb-3 pb-2 border-b border-forest/15">
                   Dispatch Notes
                 </h3>
                 {product.descriptionHtml ? (
@@ -254,7 +291,7 @@ export default async function ProductPage({
             )}
 
             {/* Secondary info */}
-            <p className="font-data text-[9px] tracking-[0.15em] text-forest/30 uppercase">
+            <p className="font-data text-[11px] tracking-[0.15em] text-forest/30 uppercase">
               All orders fulfilled via Ghost Forest Surf Club Shopify.
               Free shipping on orders over $150.
             </p>
@@ -278,7 +315,7 @@ function DetailRow({
 }) {
   return (
     <div className="flex items-center justify-between px-4 py-2.5">
-      <span className="font-data text-[10px] tracking-[0.2em] text-forest/50 uppercase">
+      <span className="font-data text-[11px] tracking-[0.2em] text-forest/50 uppercase">
         {label}
       </span>
       <span

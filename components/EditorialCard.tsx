@@ -37,7 +37,7 @@ export default function EditorialCard({
     <article className="group border-[2.5px] border-forest bg-linen overflow-hidden transition-colors duration-200 hover:border-copper">
       {/* Dispatch header */}
       <div className="px-3 py-2 border-b border-forest/10 transition-colors duration-200 group-hover:border-copper/30">
-        <p className="font-data text-[10px] tracking-[0.2em] text-copper uppercase">
+        <p className="font-data text-[11px] tracking-[0.2em] text-copper uppercase">
           Dispatch
         </p>
       </div>
