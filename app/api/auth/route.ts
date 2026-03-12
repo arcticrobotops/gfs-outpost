@@ -140,7 +140,8 @@ export async function POST(request: NextRequest) {
       crypto.timingSafeEqual(passwordBuffer, expectedBuffer);
 
     if (isValid) {
-      const response = NextResponse.redirect(new URL(next, request.url));
+      // 303 See Other — ensures the browser follows the redirect with GET (not POST)
+      const response = NextResponse.redirect(new URL(next, request.url), 303);
       response.cookies.set(COOKIE_NAME, createSignedToken(), {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
