@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { getProductByHandle, getProducts } from '@/lib/shopify';
 import ProductDetail from '@/components/ProductDetail';
+import ProductImageGallery from '@/components/ProductImageGallery';
 import PDPSkeleton from '@/components/PDPSkeleton';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
@@ -151,63 +152,16 @@ export default async function ProductPage({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
               {/* Image column */}
-              <div className="space-y-3">
-                {images[0] ? (
-                  <div className="border-[2.5px] border-forest overflow-hidden bg-sage/10">
-                    <div className="relative aspect-[3/4]">
-                      <Image
-                        src={images[0].url}
-                        alt={images[0].altText || product.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover"
-                        priority
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="border-[2.5px] border-forest aspect-[3/4] flex items-center justify-center bg-sage/10">
-                    <span className="font-data text-xs tracking-widest text-sage uppercase">
-                      No Image
-                    </span>
-                  </div>
-                )}
-
-                {/* Data bar under image */}
-                <div className="bg-forest px-4 py-2.5">
-                  <p className="font-data text-xs tracking-[0.15em] text-linen/90 uppercase">
-                    No. {itemNo}
-                    <span className="mx-2 text-copper/60">|</span>
-                    {collection}
-                    <span className="mx-2 text-copper/60">|</span>
-                    <span className="text-copper font-medium">
-                      ${Math.round(price)}
-                      {hasVariants && maxPrice !== price && `\u2013$${Math.round(maxPrice)}`}
-                    </span>
-                  </p>
-                </div>
-
-                {/* Thumbnail row */}
-                {images.length > 1 && (
-                  <div className="grid grid-cols-4 gap-2">
-                    {images.slice(1, 5).map((img, i) => (
-                      <div
-                        key={i}
-                        className="border-[2px] border-forest/30 overflow-hidden bg-sage/10"
-                      >
-                        <div className="relative aspect-square">
-                          <Image
-                            src={img.url}
-                            alt={img.altText || `${product.title} - image ${i + 2}`}
-                            fill
-                            sizes="(max-width: 768px) 25vw, 12vw"
-                            className="object-cover"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              <div>
+                <ProductImageGallery
+                  images={images}
+                  title={product.title}
+                  itemNo={itemNo}
+                  collection={collection}
+                  price={price}
+                  maxPrice={maxPrice}
+                  hasVariants={hasVariants}
+                />
               </div>
 
               {/* Detail column */}
