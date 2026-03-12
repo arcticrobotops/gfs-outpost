@@ -58,9 +58,33 @@ export default async function ProductPage({
   const images = product.images.edges.map((e) => e.node);
   const price = parseFloat(product.priceRange.minVariantPrice.amount);
   const maxPrice = parseFloat(product.priceRange.maxVariantPrice.amount);
-  const collection = product.collections.edges[0]?.node.title || product.productType || 'Goods';
+  const collectionNode = product.collections.edges[0]?.node;
+  const collection = collectionNode?.title || product.productType || 'Goods';
   const hasVariants = product.variants.edges.length > 1;
   const anyAvailable = product.variants.edges.some((v) => v.node.availableForSale);
+
+  // Derive item number from handle hash
+  function hashHandle(str: string): number {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  }
+  const itemNo = String((hashHandle(handle) % 999) + 1).padStart(3, '0');
+
+  // Related items
+  const { products: allRelated } = await getProducts(20, undefined, collectionNode?.handle || undefined);
+  const relatedProducts = allRelated
+    .filter((p) => p.handle !== handle)
+    .slice(0, 4)
+    .map((p) => ({
+      handle: p.handle,
+      title: p.title,
+      price: parseFloat(p.priceRange.minVariantPrice.amount),
+      imageUrl: p.images.edges[0]?.node.url || null,
+      imageAlt: p.images.edges[0]?.node.altText || null,
+      productType: p.productType,
+      itemNo: String((hashHandle(p.handle) % 999) + 1).padStart(3, '0'),
+    }));
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -152,7 +176,7 @@ export default async function ProductPage({
                 {/* Data bar under image */}
                 <div className="bg-forest px-4 py-2.5">
                   <p className="font-data text-xs tracking-[0.15em] text-linen/90 uppercase">
-                    No. 001
+                    No. {itemNo}
                     <span className="mx-2 text-copper/60">|</span>
                     {collection}
                     <span className="mx-2 text-copper/60">|</span>
@@ -215,7 +239,7 @@ export default async function ProductPage({
                     </h3>
                   </div>
                   <div className="divide-y divide-forest/15">
-                    <DetailRow label="Item No." value="001" />
+                    <DetailRow label="Item No." value={itemNo} />
                     <DetailRow label="Category" value={collection} />
                     <DetailRow
                       label="Unit Price"
@@ -274,6 +298,52 @@ export default async function ProductPage({
                 </p>
               </div>
             </div>
+
+            {/* Related Items */}
+            {relatedProducts.length > 0 && (
+              <div className="mt-12 pt-8 border-t-[2.5px] border-forest">
+                <div className="mb-6 pb-3 border-b-[2.5px] border-forest">
+                  <h2 className="font-data text-xs tracking-[0.3em] text-forest/50 uppercase">
+                    Related Inventory
+                  </h2>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {relatedProducts.map((rp) => (
+                    <Link
+                      key={rp.handle}
+                      href={`/products/${rp.handle}`}
+                      className="group block"
+                    >
+                      <div className="border-[2.5px] border-forest overflow-hidden bg-sage/10 group-hover:border-copper transition-colors">
+                        <div className="relative aspect-square">
+                          {rp.imageUrl ? (
+                            <Image
+                              src={rp.imageUrl}
+                              alt={rp.imageAlt || rp.title}
+                              fill
+                              sizes="(max-width: 640px) 50vw, 25vw"
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="font-data text-xs tracking-widest text-sage uppercase">No Image</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="bg-forest px-3 py-1.5">
+                          <p className="font-data text-[10px] tracking-[0.15em] text-linen/70 uppercase truncate">
+                            No. {rp.itemNo} <span className="text-copper/60 mx-1">|</span> <span className="text-copper">${Math.round(rp.price)}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <h3 className="font-body text-sm text-forest mt-2 leading-tight line-clamp-2 group-hover:text-copper transition-colors">
+                        {rp.title}
+                      </h3>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </main>
       </ErrorBoundary>
