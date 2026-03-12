@@ -173,6 +173,12 @@ function loginHTML(next: string, error?: string) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ghost Forest Surf Club</title>
+  <meta name="description" content="Coldwater surf goods from Station 45°N. Neskowin, Oregon. Est. 2024.">
+  <meta property="og:title" content="Ghost Forest Surf Club — Outpost">
+  <meta property="og:description" content="Coldwater surf goods from Station 45°N. Neskowin, Oregon. Est. 2024.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -255,7 +261,7 @@ function loginHTML(next: string, error?: string) {
     <form method="POST" action="/api/auth">
       <input type="hidden" name="next" value="${safeNext}" />
       <label for="password" class="sr-only">Password</label>
-      <input type="password" name="password" id="password" placeholder="Password" autofocus required${safeError ? ` aria-describedby="${errorId}"` : ''} />
+      <input type="password" name="password" id="password" placeholder="Password" autocomplete="current-password" autofocus required${safeError ? ` aria-describedby="${errorId}"` : ''} />
       <button type="submit">Enter</button>
     </form>
   </div>
