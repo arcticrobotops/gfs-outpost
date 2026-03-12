@@ -3,7 +3,7 @@
 :root {
   --color-linen: #F5F0E8;
   --color-forest: #1B3A2D;
-  --color-copper: #C4873A;
+  --color-copper: #D4A04A;
   --color-sage: #8B9D83;
   --color-slate: #4A5568;
 }
@@ -92,4 +92,17 @@ html {
 
 .safe-area-bottom {
   padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }

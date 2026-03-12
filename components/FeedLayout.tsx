@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 import Navbar from './Navbar';
 import ProductCard from './ProductCard';
@@ -22,34 +22,57 @@ export default function FeedLayout({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Issue #9: AbortController ref for cancelling in-flight requests
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   const fetchFiltered = useCallback(async (collection: string) => {
+    // Cancel any in-flight request
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setLoading(true);
     setError(null);
     try {
       const res = await fetch(
         `/api/products?collection=${encodeURIComponent(collection)}`,
+        { signal: controller.signal },
       );
       if (!res.ok) throw new Error(`Request failed (${res.status})`);
       const data = await res.json();
       setProducts(data.products || []);
     } catch (err) {
+      // Don't update state if the request was aborted
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return;
+      }
       setError(
         err instanceof Error ? err.message : 'Failed to load products',
       );
       setProducts([]);
     } finally {
-      setLoading(false);
+      // Only clear loading if this controller wasn't aborted
+      if (!controller.signal.aborted) {
+        setLoading(false);
+      }
     }
   }, []);
 
   useEffect(() => {
     if (activeCollection === 'all') {
+      // Cancel any in-flight request when switching back to 'all'
+      abortControllerRef.current?.abort();
       setProducts(initialProducts);
       setError(null);
       return;
     }
 
     fetchFiltered(activeCollection);
+
+    // Cleanup: abort on unmount or dependency change
+    return () => {
+      abortControllerRef.current?.abort();
+    };
   }, [activeCollection, initialProducts, fetchFiltered]);
 
   // Build the feed: interleave products with editorials and text moments
@@ -147,9 +170,9 @@ export default function FeedLayout({
           </div>
         )}
 
-        {/* Error state */}
+        {/* Issue #14: Error state with role="alert" for screen reader announcement */}
         {!loading && error && (
-          <div className="flex flex-col items-center justify-center py-20 border-[2.5px] border-red-700/30">
+          <div className="flex flex-col items-center justify-center py-20 border-[2.5px] border-red-700/30" role="alert">
             <div className="w-8 h-8 mb-4 flex items-center justify-center border-2 border-red-700/40 rounded-full">
               <span className="text-red-700 font-data text-sm font-bold">!</span>
             </div>

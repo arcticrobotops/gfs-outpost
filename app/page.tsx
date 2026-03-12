@@ -21,8 +21,20 @@ export default async function Home() {
     console.error('Failed to fetch from Shopify:', error);
   }
 
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Ghost Forest Surf Club',
+    url: 'https://ghostforestsurfclub.com',
+    description: 'Coldwater surf goods from Station 45\u00b0N. Neskowin, Oregon. Est. 2024.',
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd).replace(/</g, '\\u003c') }}
+      />
       <ErrorBoundary>
         <HeroSection />
       </ErrorBoundary>

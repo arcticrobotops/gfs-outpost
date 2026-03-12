@@ -1,6 +1,7 @@
 export default function PDPSkeleton() {
   return (
-    <main className="min-h-screen bg-linen animate-pulse" aria-busy="true" role="status">
+    <div className="min-h-screen bg-linen animate-pulse" aria-busy="true" role="status">
+      <span className="sr-only">Loading product details...</span>
       {/* Top nav skeleton */}
       <nav className="border-b-[2.5px] border-forest/20 bg-forest/[0.03]">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
@@ -47,6 +48,6 @@ export default function PDPSkeleton() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -43,7 +43,12 @@ export async function generateMetadata({
       title: `${product.title} — GFS Outpost`,
       description: product.description?.slice(0, 160) || `${product.title}. Coldwater surf goods from Station 45°N.`,
       images: image ? [{ url: image.url, width: image.width, height: image.height, alt: image.altText || product.title }] : [],
+      // Next.js Metadata types don't include 'product' as a valid og:type,
+      // but we override it via the `other` field below for the actual meta tag.
       type: 'website',
+    },
+    other: {
+      'og:type': 'product',
     },
   };
 }
@@ -95,6 +100,7 @@ export default async function ProductPage({
       '@type': 'Brand',
       name: 'Ghost Forest Surf Club',
     },
+    sku: `GFS-${itemNo}`,
     ...(product.onlineStoreUrl && { url: product.onlineStoreUrl }),
     offers: hasVariants
       ? {
@@ -120,7 +126,7 @@ export default async function ProductPage({
   return (
     <Suspense fallback={<PDPSkeleton />}>
       <ErrorBoundary>
-        <main className="min-h-screen bg-linen pb-20 md:pb-0">
+        <div className="min-h-screen bg-linen pb-20 md:pb-0">
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
@@ -143,7 +149,7 @@ export default async function ProductPage({
           <div className="mx-auto max-w-6xl px-4 py-8 md:py-12">
             {/* Section header */}
             <div className="mb-8 border-b-[2.5px] border-forest pb-3">
-              <span className="font-data text-xs tracking-[0.3em] text-forest/50 uppercase">
+              <span className="font-data text-xs tracking-[0.3em] text-forest/70 uppercase">
                 Inventory Detail
               </span>
             </div>
@@ -174,7 +180,7 @@ export default async function ProductPage({
                       {product.tags.slice(0, 5).map((tag) => (
                         <span
                           key={tag}
-                          className="font-data text-xs tracking-[0.15em] text-forest/50 uppercase border border-forest/20 px-2 py-0.5"
+                          className="font-data text-xs tracking-[0.15em] text-forest/70 uppercase border border-forest/20 px-2 py-0.5"
                         >
                           {tag}
                         </span>
@@ -186,9 +192,9 @@ export default async function ProductPage({
                 {/* Detail grid */}
                 <div className="border-[2.5px] border-forest">
                   <div className="bg-forest px-4 py-2">
-                    <h3 className="font-data text-xs tracking-[0.25em] text-linen/80 uppercase">
+                    <h2 className="font-data text-xs tracking-[0.25em] text-linen/80 uppercase">
                       Field Report
-                    </h3>
+                    </h2>
                   </div>
                   <div className="divide-y divide-forest/15">
                     <DetailRow label="Item No." value={itemNo} />
@@ -227,9 +233,9 @@ export default async function ProductPage({
                 {/* Description / Dispatch Notes */}
                 {product.description && (
                   <div>
-                    <h3 className="font-data text-xs tracking-[0.25em] text-forest/50 uppercase mb-3 pb-2 border-b border-forest/15">
+                    <h2 className="font-data text-xs tracking-[0.25em] text-forest/70 uppercase mb-3 pb-2 border-b border-forest/15">
                       Dispatch Notes
-                    </h3>
+                    </h2>
                     {product.descriptionHtml ? (
                       <div
                         className="font-body text-sm text-forest/80 leading-relaxed prose prose-sm max-w-none prose-headings:font-data prose-headings:text-forest prose-strong:text-forest"
@@ -255,7 +261,7 @@ export default async function ProductPage({
             {relatedProducts.length > 0 && (
               <div className="mt-12 pt-8 border-t-[2.5px] border-forest">
                 <div className="mb-6 pb-3 border-b-[2.5px] border-forest">
-                  <h2 className="font-data text-xs tracking-[0.3em] text-forest/50 uppercase">
+                  <h2 className="font-data text-xs tracking-[0.3em] text-forest/70 uppercase">
                     Related Inventory
                   </h2>
                 </div>
@@ -265,6 +271,7 @@ export default async function ProductPage({
                       key={rp.handle}
                       href={`/products/${rp.handle}`}
                       className="group block"
+                      aria-label={rp.title}
                     >
                       <div className="border-[2.5px] border-forest overflow-hidden bg-sage/10 group-hover:border-copper transition-colors">
                         <div className="relative aspect-square">
@@ -297,7 +304,7 @@ export default async function ProductPage({
               </div>
             )}
           </div>
-        </main>
+        </div>
       </ErrorBoundary>
     </Suspense>
   );
@@ -316,7 +323,7 @@ function DetailRow({
 }) {
   return (
     <div className="flex items-center justify-between px-4 py-2.5">
-      <span className="font-data text-xs tracking-[0.2em] text-forest/50 uppercase">
+      <span className="font-data text-xs tracking-[0.2em] text-forest/70 uppercase">
         {label}
       </span>
       <span

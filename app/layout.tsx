@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   title: "Ghost Forest Surf Club — Outpost",
   description:
     "Coldwater surf goods from Station 45\u00b0N. Neskowin, Oregon. Est. 2024.",
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "surf",
     "coldwater",

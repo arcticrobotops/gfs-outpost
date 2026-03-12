@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { ShopifyCollection } from '@/types/shopify';
 
 interface NavbarProps {
@@ -16,6 +16,7 @@ export default function Navbar({
 }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const [menuHeight, setMenuHeight] = useState(0);
 
   useEffect(() => {
@@ -23,6 +24,36 @@ export default function Navbar({
       setMenuHeight(menuOpen ? menuRef.current.scrollHeight : 0);
     }
   }, [menuOpen]);
+
+  // Issue #8: Focus trap — focus first item on open, return focus on close
+  useEffect(() => {
+    if (menuOpen) {
+      // Focus the first focusable element in the menu
+      const firstFocusable = menuRef.current?.querySelector<HTMLElement>(
+        'button, a, [tabindex]:not([tabindex="-1"])'
+      );
+      // Slight delay to allow the menu to expand
+      requestAnimationFrame(() => {
+        firstFocusable?.focus();
+      });
+    }
+  }, [menuOpen]);
+
+  // Issue #8: Escape key closes menu and returns focus to toggle
+  const handleMenuKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape' && menuOpen) {
+        setMenuOpen(false);
+        toggleRef.current?.focus();
+      }
+    },
+    [menuOpen],
+  );
+
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    toggleRef.current?.focus();
+  }, []);
 
   return (
     <header className="sticky top-0 z-50">
@@ -41,6 +72,7 @@ export default function Navbar({
           <div className="flex items-center justify-between py-4">
             {/* Menu button — mobile only */}
             <button
+              ref={toggleRef}
               onClick={() => setMenuOpen(!menuOpen)}
               className="md:hidden flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2"
               aria-label="Toggle menu"
@@ -68,10 +100,12 @@ export default function Navbar({
               GHOST FOREST SURF CLUB
             </span>
 
-            {/* Bag button */}
+            {/* Issue #16: Bag button — aria-disabled with tooltip */}
             <button
               className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2"
               aria-label="Shopping bag"
+              aria-disabled="true"
+              title="Coming soon"
             >
               <span className="hidden sm:inline">Bag</span>
               <svg
@@ -119,6 +153,7 @@ export default function Navbar({
       </nav>
 
       {/* Mobile menu with CSS transition */}
+      {/* Issue #8: aria-hidden when closed, keydown for Escape */}
       <div
         ref={menuRef}
         className="overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out md:hidden"
@@ -126,6 +161,8 @@ export default function Navbar({
           maxHeight: menuHeight,
           opacity: menuOpen ? 1 : 0,
         }}
+        aria-hidden={!menuOpen}
+        onKeyDown={handleMenuKeyDown}
       >
         <div className="bg-forest border-b-2 border-copper">
           <nav aria-label="Mobile menu" className="mx-auto max-w-7xl px-6 py-6">
@@ -133,9 +170,10 @@ export default function Navbar({
               <li>
                 <button
                   className="block font-data text-sm tracking-[0.15em] text-linen uppercase hover:text-copper transition-colors"
+                  tabIndex={menuOpen ? 0 : -1}
                   onClick={() => {
                     onCollectionChange('all');
-                    setMenuOpen(false);
+                    closeMenu();
                   }}
                 >
                   Shop All

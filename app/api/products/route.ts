@@ -7,8 +7,8 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const collection = searchParams.get('collection') || undefined;
 
-  // Validate collection handle format
-  if (collection && !COLLECTION_HANDLE_PATTERN.test(collection)) {
+  // Validate collection handle format and length
+  if (collection && (!COLLECTION_HANDLE_PATTERN.test(collection) || collection.length > 100)) {
     return NextResponse.json(
       { error: 'Invalid collection handle', products: [] },
       { status: 400 }

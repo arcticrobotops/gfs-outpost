@@ -29,11 +29,11 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="flex flex-col items-center justify-center py-12 px-4">
+          <div className="flex flex-col items-center justify-center py-12 px-4" role="alert">
             <div className="w-8 h-8 mb-4 flex items-center justify-center border-2 border-forest/30 rounded-full">
-              <span className="text-forest/50 font-data text-sm font-bold">!</span>
+              <span className="text-forest/70 font-data text-sm font-bold">!</span>
             </div>
-            <p className="font-data text-xs tracking-[0.1em] sm:tracking-[0.2em] text-forest/50 uppercase mb-2">
+            <p className="font-data text-xs tracking-[0.1em] sm:tracking-[0.2em] text-forest/70 uppercase mb-2">
               Component Error
             </p>
             <p className="font-body text-sm text-slate text-center">

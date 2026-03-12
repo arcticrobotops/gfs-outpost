@@ -2,8 +2,41 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 
 const PASSWORD = process.env.SITE_PASSWORD;
-const AUTH_SECRET = process.env.AUTH_SECRET || 'fallback-dev-secret';
+
+// Issue #26: Validate SITE_PASSWORD is set at startup
+if (!PASSWORD) {
+  console.error('FATAL: Missing required environment variable: SITE_PASSWORD');
+}
+
+// Issue #5: No fallback secret — require AUTH_SECRET at runtime
+function getAuthSecret(): string {
+  const secret = process.env.AUTH_SECRET;
+  if (!secret) {
+    throw new Error('Missing required environment variable: AUTH_SECRET');
+  }
+  return secret;
+}
+
 const COOKIE_NAME = 'site-auth';
+const TOKEN_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+// Issue #2: In-memory rate limiter — max 5 attempts per 60s per IP
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  entry.count++;
+  return entry.count > RATE_LIMIT_MAX;
+}
 
 function escapeHtml(str: string): string {
   return str
@@ -23,16 +56,26 @@ function sanitizeNext(raw: string | null): string {
 /** Create an HMAC-signed auth token. */
 function createSignedToken(): string {
   const payload = Date.now().toString();
-  const hmac = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('hex');
+  // Note: This uses Node.js crypto (available in API routes / Node runtime).
+  // The middleware uses Web Crypto API (globalThis.crypto.subtle) because
+  // Next.js middleware runs in the Edge runtime which does not have Node.js crypto.
+  const hmac = crypto.createHmac('sha256', getAuthSecret()).update(payload).digest('hex');
   return `${payload}.${hmac}`;
 }
 
-/** Verify an HMAC-signed auth token. */
+/** Verify an HMAC-signed auth token with expiration check. */
 export function verifySignedToken(token: string): boolean {
   const parts = token.split('.');
   if (parts.length !== 2) return false;
   const [payload, signature] = parts;
-  const expected = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('hex');
+
+  // Issue #4: Reject tokens older than 30 days
+  const timestamp = parseInt(payload, 10);
+  if (isNaN(timestamp) || Date.now() - timestamp > TOKEN_MAX_AGE_MS) {
+    return false;
+  }
+
+  const expected = crypto.createHmac('sha256', getAuthSecret()).update(payload).digest('hex');
   try {
     return crypto.timingSafeEqual(Buffer.from(signature, 'hex'), Buffer.from(expected, 'hex'));
   } catch {
@@ -51,6 +94,35 @@ export async function POST(request: NextRequest) {
   if (!PASSWORD) {
     return new NextResponse(loginHTML('/', 'Site password is not configured'), {
       status: 500,
+      headers: { 'Content-Type': 'text/html' },
+    });
+  }
+
+  // Issue #11: CSRF — validate Origin header
+  const origin = request.headers.get('origin');
+  const host = request.headers.get('host');
+  if (origin && host) {
+    try {
+      const originHost = new URL(origin).host;
+      if (originHost !== host) {
+        return new NextResponse(loginHTML('/', 'Invalid request origin'), {
+          status: 403,
+          headers: { 'Content-Type': 'text/html' },
+        });
+      }
+    } catch {
+      return new NextResponse(loginHTML('/', 'Invalid request origin'), {
+        status: 403,
+        headers: { 'Content-Type': 'text/html' },
+      });
+    }
+  }
+
+  // Issue #2: Rate limiting
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  if (isRateLimited(ip)) {
+    return new NextResponse(loginHTML('/', 'Too many attempts. Please try again later.'), {
+      status: 429,
       headers: { 'Content-Type': 'text/html' },
     });
   }
@@ -93,6 +165,7 @@ export async function POST(request: NextRequest) {
 function loginHTML(next: string, error?: string) {
   const safeNext = escapeHtml(next);
   const safeError = error ? escapeHtml(error) : '';
+  const errorId = 'password-error';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -161,16 +234,28 @@ function loginHTML(next: string, error?: string) {
       font-size: 13px;
       margin-bottom: 0.5rem;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border-width: 0;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <p class="brand">Ghost Forest Surf Club</p>
     <h1>Enter Password</h1>
-    ${safeError ? `<p class="error">${safeError}</p>` : ''}
+    ${safeError ? `<p class="error" id="${errorId}" role="alert">${safeError}</p>` : ''}
     <form method="POST" action="/api/auth">
       <input type="hidden" name="next" value="${safeNext}" />
-      <input type="password" name="password" placeholder="Password" autofocus required />
+      <label for="password" class="sr-only">Password</label>
+      <input type="password" name="password" id="password" placeholder="Password" autofocus required${safeError ? ` aria-describedby="${errorId}"` : ''} />
       <button type="submit">Enter</button>
     </form>
   </div>
