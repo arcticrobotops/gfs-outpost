@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { getProductByHandle, getProducts } from '@/lib/shopify';
-import { hashHandle, formatPrice } from '@/lib/utils';
+import { hashHandle, formatPrice, sanitizeHtml } from '@/lib/utils';
 import ProductDetail from '@/components/ProductDetail';
 import ProductImageGallery from '@/components/ProductImageGallery';
 import PDPSkeleton from '@/components/PDPSkeleton';
@@ -36,6 +36,9 @@ export async function generateMetadata({
   return {
     title: `${product.title} — GFS Outpost`,
     description: product.description?.slice(0, 160) || `${product.title}. Coldwater surf goods from Station 45°N.`,
+    alternates: {
+      canonical: `/products/${handle}`,
+    },
     openGraph: {
       title: `${product.title} — GFS Outpost`,
       description: product.description?.slice(0, 160) || `${product.title}. Coldwater surf goods from Station 45°N.`,
@@ -120,7 +123,7 @@ export default async function ProductPage({
         <main className="min-h-screen bg-linen pb-20 md:pb-0">
           <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
           />
           {/* Top nav bar */}
           <nav className="border-b-[2.5px] border-forest bg-forest/[0.03]">
@@ -140,9 +143,9 @@ export default async function ProductPage({
           <div className="mx-auto max-w-6xl px-4 py-8 md:py-12">
             {/* Section header */}
             <div className="mb-8 border-b-[2.5px] border-forest pb-3">
-              <h1 className="font-data text-xs tracking-[0.3em] text-forest/50 uppercase">
+              <span className="font-data text-xs tracking-[0.3em] text-forest/50 uppercase">
                 Inventory Detail
-              </h1>
+              </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
@@ -163,9 +166,9 @@ export default async function ProductPage({
               <div className="space-y-6">
                 {/* Product title */}
                 <div>
-                  <h2 className="font-display text-2xl md:text-3xl font-semibold text-forest leading-tight">
+                  <h1 className="font-display text-2xl md:text-3xl font-semibold text-forest leading-tight">
                     {product.title}
-                  </h2>
+                  </h1>
                   {product.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {product.tags.slice(0, 5).map((tag) => (
@@ -230,7 +233,7 @@ export default async function ProductPage({
                     {product.descriptionHtml ? (
                       <div
                         className="font-body text-sm text-forest/80 leading-relaxed prose prose-sm max-w-none prose-headings:font-data prose-headings:text-forest prose-strong:text-forest"
-                        dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.descriptionHtml) }}
                       />
                     ) : (
                       <p className="font-body text-sm text-forest/80 leading-relaxed">

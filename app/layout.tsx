@@ -47,6 +47,14 @@ export const metadata: Metadata = {
     title: "Ghost Forest Surf Club — Outpost",
     description:
       "Coldwater surf goods from Station 45\u00b0N. Neskowin, Oregon. Est. 2024.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Ghost Forest Surf Club — Outpost",
+      },
+    ],
     type: "website",
     siteName: "Ghost Forest Surf Club",
     locale: "en_US",
@@ -56,6 +64,7 @@ export const metadata: Metadata = {
     title: "Ghost Forest Surf Club — Outpost",
     description:
       "Coldwater surf goods from Station 45\u00b0N. Neskowin, Oregon. Est. 2024.",
+    images: ["/og-image.png"],
   },
   metadataBase: new URL("https://ghostforestsurfclub.com"),
 };
@@ -79,7 +88,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <div id="main-content">{children}</div>
+        <main id="main-content">{children}</main>
         <Footer />
       </body>
     </html>

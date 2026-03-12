@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Footer() {
   return (
     <footer className="bg-forest text-linen border-t-[3px] border-copper">
@@ -11,9 +13,9 @@ export default function Footer() {
             </p>
 
             {/* Brand name */}
-            <h2 className="font-display text-2xl sm:text-3xl font-semibold tracking-wide text-linen mb-4">
+            <p className="font-display text-2xl sm:text-3xl font-semibold tracking-wide text-linen mb-4">
               GHOST FOREST SURF CLUB
-            </h2>
+            </p>
 
             {/* Copper divider */}
             <div className="w-24 h-[2px] bg-copper mx-auto mb-4" />
@@ -32,30 +34,30 @@ export default function Footer() {
           {/* Bottom links */}
           <div className="mt-10 pt-6 border-t border-linen/10 w-full max-w-md">
             <div className="flex items-center justify-center gap-4 sm:gap-6 flex-wrap">
-              <a
+              <Link
                 href="/"
                 className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
               >
                 Shop
-              </a>
-              <a
-                href="/"
-                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
+              </Link>
+              <span
+                aria-disabled="true"
+                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase cursor-default"
               >
                 About
-              </a>
-              <a
-                href="/"
-                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
+              </span>
+              <span
+                aria-disabled="true"
+                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase cursor-default"
               >
                 Contact
-              </a>
-              <a
-                href="/"
-                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
+              </span>
+              <span
+                aria-disabled="true"
+                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase cursor-default"
               >
                 Returns
-              </a>
+              </span>
             </div>
           </div>
 

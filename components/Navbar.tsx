@@ -95,7 +95,7 @@ export default function Navbar({
       </div>
 
       {/* Category filter bar */}
-      <div className="bg-linen border-b-2 border-forest/20">
+      <nav aria-label="Product filters" className="bg-linen border-b-2 border-forest/20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide snap-x snap-proximity">
             <span className="shrink-0 font-data text-xs tracking-[0.1em] sm:tracking-[0.2em] text-sage uppercase mr-1 hidden sm:inline">
@@ -116,7 +116,7 @@ export default function Navbar({
             ))}
           </div>
         </div>
-      </div>
+      </nav>
 
       {/* Mobile menu with CSS transition */}
       <div
@@ -128,7 +128,7 @@ export default function Navbar({
         }}
       >
         <div className="bg-forest border-b-2 border-copper">
-          <nav className="mx-auto max-w-7xl px-6 py-6">
+          <nav aria-label="Mobile menu" className="mx-auto max-w-7xl px-6 py-6">
             <ul className="space-y-4">
               <li>
                 <button
@@ -143,13 +143,12 @@ export default function Navbar({
               </li>
               {['About', 'Field Reports', 'Contact'].map((item) => (
                 <li key={item}>
-                  <a
-                    href="/"
-                    className="block font-data text-sm tracking-[0.15em] text-linen uppercase hover:text-copper transition-colors"
-                    onClick={() => setMenuOpen(false)}
+                  <span
+                    aria-disabled="true"
+                    className="block font-data text-sm tracking-[0.15em] text-linen/50 uppercase cursor-default"
                   >
                     {item}
-                  </a>
+                  </span>
                 </li>
               ))}
             </ul>

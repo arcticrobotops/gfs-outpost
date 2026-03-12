@@ -58,31 +58,3 @@ export interface ShopifyProductDetail extends ShopifyProduct {
     }>;
   };
 }
-
-// Feed card types
-export type FeedCardType = 'product' | 'editorial' | 'text-moment';
-
-export interface ProductCard {
-  type: 'product';
-  product: ShopifyProduct;
-}
-
-export interface EditorialCard {
-  type: 'editorial';
-  imageUrl: string;
-  alt: string;
-}
-
-export interface TextMomentCard {
-  type: 'text-moment';
-  text: string;
-  bgColor: 'green' | 'linen';
-}
-
-export type FeedCard = ProductCard | EditorialCard | TextMomentCard;
-
-// Grid layout pattern
-export interface GridSpan {
-  colSpan: number;
-  rowSpan: number;
-}

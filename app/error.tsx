@@ -1,6 +1,12 @@
 'use client';
 
-export default function Error({ reset }: { error: Error; reset: () => void }) {
+import { useEffect } from 'react';
+
+export default function Error({ error, reset }: { error: Error; reset: () => void }) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
     <div className="min-h-screen bg-linen flex items-center justify-center px-6">
       <div className="text-center max-w-md">

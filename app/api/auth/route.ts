@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
 
 const PASSWORD = process.env.SITE_PASSWORD;
+const AUTH_SECRET = process.env.AUTH_SECRET || 'fallback-dev-secret';
 const COOKIE_NAME = 'site-auth';
 
 function escapeHtml(str: string): string {
@@ -16,6 +18,26 @@ function escapeHtml(str: string): string {
 function sanitizeNext(raw: string | null): string {
   if (!raw || !raw.startsWith('/') || raw.startsWith('//')) return '/';
   return raw;
+}
+
+/** Create an HMAC-signed auth token. */
+function createSignedToken(): string {
+  const payload = Date.now().toString();
+  const hmac = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('hex');
+  return `${payload}.${hmac}`;
+}
+
+/** Verify an HMAC-signed auth token. */
+export function verifySignedToken(token: string): boolean {
+  const parts = token.split('.');
+  if (parts.length !== 2) return false;
+  const [payload, signature] = parts;
+  const expected = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('hex');
+  try {
+    return crypto.timingSafeEqual(Buffer.from(signature, 'hex'), Buffer.from(expected, 'hex'));
+  } catch {
+    return false;
+  }
 }
 
 export async function GET(request: NextRequest) {
@@ -38,9 +60,16 @@ export async function POST(request: NextRequest) {
     const password = formData.get('password') as string;
     const next = sanitizeNext(formData.get('next') as string);
 
-    if (password === PASSWORD) {
+    // Timing-safe password comparison
+    const passwordBuffer = Buffer.from(password);
+    const expectedBuffer = Buffer.from(PASSWORD);
+    const isValid =
+      passwordBuffer.length === expectedBuffer.length &&
+      crypto.timingSafeEqual(passwordBuffer, expectedBuffer);
+
+    if (isValid) {
       const response = NextResponse.redirect(new URL(next, request.url));
-      response.cookies.set(COOKIE_NAME, 'authenticated', {
+      response.cookies.set(COOKIE_NAME, createSignedToken(), {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',

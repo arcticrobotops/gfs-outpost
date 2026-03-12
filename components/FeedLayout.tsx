@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 import Navbar from './Navbar';
 import ProductCard from './ProductCard';
@@ -22,7 +22,7 @@ export default function FeedLayout({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchFiltered = async (collection: string) => {
+  const fetchFiltered = useCallback(async (collection: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -40,7 +40,7 @@ export default function FeedLayout({
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (activeCollection === 'all') {
@@ -50,7 +50,7 @@ export default function FeedLayout({
     }
 
     fetchFiltered(activeCollection);
-  }, [activeCollection, initialProducts]);
+  }, [activeCollection, initialProducts, fetchFiltered]);
 
   // Build the feed: interleave products with editorials and text moments
   const feedItems: React.ReactNode[] = [];
@@ -127,7 +127,7 @@ export default function FeedLayout({
 
         {/* Loading state */}
         {loading && (
-          <div className="border-[2.5px] border-forest p-6 sm:p-8">
+          <div className="border-[2.5px] border-forest p-6 sm:p-8" role="status" aria-live="polite">
             <p className="font-data text-xs tracking-[0.15em] sm:tracking-[0.25em] text-copper uppercase mb-6 text-center animate-pulse">
               Transmitting...
             </p>

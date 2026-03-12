@@ -7,11 +7,14 @@ export function formatPrice(amount: number): string {
 }
 
 /**
- * Format a price range string (e.g. "$45–$60").
+ * Sanitize HTML by stripping <script> tags and on* event handler attributes.
  */
-export function formatPriceRange(min: number, max: number): string {
-  if (min === max) return formatPrice(min);
-  return `$${Math.round(min)}\u2013$${Math.round(max)}`;
+export function sanitizeHtml(html: string): string {
+  // Remove <script> tags and their content
+  let sanitized = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+  // Remove on* event handler attributes (e.g. onclick, onerror, onload)
+  sanitized = sanitized.replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+  return sanitized;
 }
 
 /**
