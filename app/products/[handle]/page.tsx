@@ -246,7 +246,7 @@ export default async function ProductPage({
                       value={
                         hasVariants && maxPrice !== price
                           ? `$${Math.round(price)}\u2013$${Math.round(maxPrice)}`
-                          : `$${price.toFixed(2)}`
+                          : `$${price % 1 === 0 ? price.toFixed(0) : price.toFixed(2)}`
                       }
                       highlight
                     />
