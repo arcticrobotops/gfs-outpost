@@ -34,7 +34,7 @@ export default function Navbar({
             {/* Menu button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex items-center gap-1.5 font-data text-xs tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
+              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
               aria-label="Toggle menu"
             >
               <svg
@@ -61,7 +61,7 @@ export default function Navbar({
 
             {/* Bag button */}
             <button
-              className="flex items-center gap-1.5 font-data text-xs tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
+              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
               aria-label="Shopping bag"
             >
               <span className="hidden sm:inline">Bag</span>
@@ -147,7 +147,7 @@ function FilterPill({
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 rounded-full px-4 py-1.5 min-h-[44px] inline-flex items-center font-data text-xs tracking-[0.12em] uppercase transition-colors snap-start
+      className={`shrink-0 rounded-full px-4 py-1.5 min-h-[44px] inline-flex items-center font-data text-[13px] tracking-[0.12em] uppercase transition-colors snap-start
         ${
           active
             ? 'bg-forest text-linen'

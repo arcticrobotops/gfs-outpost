@@ -104,7 +104,7 @@ export default function ProductDetail({
       {shopifyUrl && (
         <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-linen border-t-[2.5px] border-forest px-4 py-4 flex items-center gap-3 safe-area-bottom">
           <div className="flex-1 min-w-0">
-            <p className="font-data text-xs tracking-wider text-forest/60 uppercase truncate">
+            <p className="font-data text-xs tracking-wider text-forest/60 uppercase max-w-[180px] truncate">
               {isAvailable ? 'Ready to ship' : 'Unavailable'}
             </p>
             <p className="font-data text-sm tracking-wider text-copper font-medium">
