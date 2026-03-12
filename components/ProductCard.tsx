@@ -7,12 +7,18 @@ interface ProductCardProps {
   index: number;
 }
 
-export default function ProductCard({ product, index }: ProductCardProps) {
+function hashHandle(str: string): number {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
   const image = product.images.edges[0]?.node;
   const price = parseFloat(product.priceRange.minVariantPrice.amount);
   const collection =
     product.collections.edges[0]?.node.title || product.productType || 'Goods';
-  const itemNo = String(index + 1).padStart(3, '0');
+  const itemNo = String((hashHandle(product.handle) % 999) + 1).padStart(3, '0');
 
   return (
     <Link
