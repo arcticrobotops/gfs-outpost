@@ -200,13 +200,57 @@ export default function FeedLayout({
 
         {/* Empty state */}
         {!loading && !error && products.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20">
-            <p className="font-data text-xs tracking-[0.1em] sm:tracking-[0.2em] text-sage uppercase mb-2">
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '80px 24px',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ color: '#D4A04A', fontSize: '20px', marginBottom: '16px' }}>&#9679;</div>
+            <p
+              style={{
+                fontFamily: '"DM Sans", system-ui, sans-serif',
+                fontSize: '0.75rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                color: '#1B3A2D',
+                marginBottom: '8px',
+              }}
+            >
               No items found
             </p>
-            <p className="font-body text-sm text-slate">
+            <p
+              style={{
+                fontFamily: '"DM Sans", system-ui, sans-serif',
+                fontSize: '0.875rem',
+                color: '#4A5568',
+                maxWidth: '20rem',
+                lineHeight: '1.6',
+              }}
+            >
               Check back soon for new inventory.
             </p>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                fontFamily: '"DM Sans", system-ui, sans-serif',
+                fontSize: '0.75rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.15em',
+                padding: '12px 24px',
+                border: '1px solid #1B3A2D',
+                backgroundColor: 'transparent',
+                color: '#1B3A2D',
+                cursor: 'pointer',
+                marginTop: '24px',
+              }}
+            >
+              Refresh
+            </button>
           </div>
         )}
       </main>
