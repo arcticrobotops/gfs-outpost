@@ -9,6 +9,7 @@ export const revalidate = 60;
 export default async function Home() {
   let products: ShopifyProduct[] = [];
   let collections: ShopifyCollection[] = [];
+  let fetchError = false;
 
   try {
     const [productsData, collectionsData] = await Promise.all([
@@ -17,8 +18,12 @@ export default async function Home() {
     ]);
     products = productsData.products;
     collections = collectionsData;
+    if (products.length === 0) {
+      console.warn('[GFS Outpost] Shopify returned zero products');
+    }
   } catch (error) {
-    console.error('Failed to fetch from Shopify:', error);
+    fetchError = true;
+    console.error('[GFS Outpost] Failed to fetch from Shopify:', error);
   }
 
   const websiteJsonLd = {
@@ -38,7 +43,43 @@ export default async function Home() {
       <ErrorBoundary>
         <HeroSection />
       </ErrorBoundary>
-      <FeedLayout initialProducts={products} collections={collections} />
+      {fetchError ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '80px 24px',
+            textAlign: 'center',
+          }}
+        >
+          <div style={{ color: '#D4A04A', fontSize: '20px', marginBottom: '16px' }}>&#9679;</div>
+          <h2
+            style={{
+              fontFamily: '"Playfair Display", Georgia, serif',
+              fontSize: '1.25rem',
+              color: '#1B3A2D',
+              marginBottom: '12px',
+            }}
+          >
+            Outpost temporarily unavailable
+          </h2>
+          <p
+            style={{
+              fontFamily: '"DM Sans", system-ui, sans-serif',
+              fontSize: '0.875rem',
+              color: '#4A5568',
+              maxWidth: '20rem',
+              lineHeight: '1.6',
+            }}
+          >
+            We&apos;re having trouble loading the goods. Please refresh to try again.
+          </p>
+        </div>
+      ) : (
+        <FeedLayout initialProducts={products} collections={collections} />
+      )}
     </>
   );
 }
