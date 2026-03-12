@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { formatPrice } from '@/lib/utils';
 
 interface Variant {
   node: {
@@ -35,7 +36,7 @@ export default function ProductDetail({
   const currentPrice = selected
     ? parseFloat(selected.node.price.amount)
     : initialPrice;
-  const formattedPrice = currentPrice % 1 === 0 ? currentPrice.toFixed(0) : currentPrice.toFixed(2);
+  const formattedPrice = formatPrice(currentPrice);
   const isAvailable = selected?.node.availableForSale ?? false;
 
   return (
@@ -58,6 +59,7 @@ export default function ProductDetail({
                   }
                 }}
                 disabled={!v.node.availableForSale}
+                aria-pressed={v.node.id === selectedVariant}
                 className={`font-data text-xs tracking-wider px-4 py-2 border transition-colors duration-150 ${
                   v.node.id === selectedVariant
                     ? 'border-copper bg-copper/10 text-copper font-medium'
@@ -76,7 +78,7 @@ export default function ProductDetail({
       {/* Dynamic price display */}
       <div className="flex items-baseline gap-3">
         <span className="font-data text-lg tracking-wider text-copper font-medium">
-          ${formattedPrice}
+          {formattedPrice}
         </span>
         {!isAvailable && selectedVariant && (
           <span className="font-data text-xs tracking-wider text-red-700/70 uppercase">
@@ -109,7 +111,7 @@ export default function ProductDetail({
               {isAvailable ? 'Ready to ship' : 'Unavailable'}
             </p>
             <p className="font-data text-sm tracking-wider text-copper font-medium">
-              ${formattedPrice}
+              {formattedPrice}
             </p>
           </div>
           <a

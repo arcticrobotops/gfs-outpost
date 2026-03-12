@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const playfairDisplay = Playfair_Display({
@@ -31,7 +32,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Ghost Forest Surf Club — Outpost",
   description:
-    "Coldwater surf goods from Station 45°N. Neskowin, Oregon. Est. 2024.",
+    "Coldwater surf goods from Station 45\u00b0N. Neskowin, Oregon. Est. 2024.",
   keywords: [
     "surf",
     "coldwater",
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ghost Forest Surf Club — Outpost",
     description:
-      "Coldwater surf goods from Station 45°N. Neskowin, Oregon. Est. 2024.",
+      "Coldwater surf goods from Station 45\u00b0N. Neskowin, Oregon. Est. 2024.",
     type: "website",
     siteName: "Ghost Forest Surf Club",
     locale: "en_US",
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Ghost Forest Surf Club — Outpost",
     description:
-      "Coldwater surf goods from Station 45°N. Neskowin, Oregon. Est. 2024.",
+      "Coldwater surf goods from Station 45\u00b0N. Neskowin, Oregon. Est. 2024.",
   },
   metadataBase: new URL("https://ghostforestsurfclub.com"),
 };
@@ -72,7 +73,14 @@ export default function RootLayout({
       <body
         className={`${playfairDisplay.variable} ${dmSans.variable} ${ibmPlexMono.variable} antialiased`}
       >
-        {children}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-forest focus:text-linen focus:font-data focus:text-xs focus:tracking-widest focus:uppercase"
+        >
+          Skip to content
+        </a>
+        <div id="main-content">{children}</div>
+        <Footer />
       </body>
     </html>
   );

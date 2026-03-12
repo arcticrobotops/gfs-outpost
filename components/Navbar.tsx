@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ShopifyCollection } from '@/types/shopify';
 
 interface NavbarProps {
@@ -15,6 +15,14 @@ export default function Navbar({
   onCollectionChange,
 }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [menuHeight, setMenuHeight] = useState(0);
+
+  useEffect(() => {
+    if (menuRef.current) {
+      setMenuHeight(menuOpen ? menuRef.current.scrollHeight : 0);
+    }
+  }, [menuOpen]);
 
   return (
     <header className="sticky top-0 z-50">
@@ -31,11 +39,12 @@ export default function Navbar({
       <div className="bg-linen border-b-2 border-forest">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-center justify-between py-4">
-            {/* Menu button */}
+            {/* Menu button — mobile only */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors min-h-[44px] min-w-[44px]"
+              className="md:hidden flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2"
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
             >
               <svg
                 width="18"
@@ -55,13 +64,13 @@ export default function Navbar({
             </button>
 
             {/* Brand */}
-            <h1 className="font-display text-xl sm:text-2xl md:text-[26px] font-semibold tracking-wide text-forest text-center">
+            <span className="font-display text-xl sm:text-2xl md:text-[26px] font-semibold tracking-wide text-forest text-center">
               GHOST FOREST SURF CLUB
-            </h1>
+            </span>
 
             {/* Bag button */}
             <button
-              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors min-h-[44px] min-w-[44px]"
+              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2"
               aria-label="Shopping bag"
             >
               <span className="hidden sm:inline">Bag</span>
@@ -88,7 +97,7 @@ export default function Navbar({
       {/* Category filter bar */}
       <div className="bg-linen border-b-2 border-forest/20">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+          <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide snap-x snap-proximity">
             <span className="shrink-0 font-data text-xs tracking-[0.1em] sm:tracking-[0.2em] text-sage uppercase mr-1 hidden sm:inline">
               Filter:
             </span>
@@ -109,28 +118,44 @@ export default function Navbar({
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="bg-forest border-b-2 border-copper md:hidden">
+      {/* Mobile menu with CSS transition */}
+      <div
+        ref={menuRef}
+        className="overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out md:hidden"
+        style={{
+          maxHeight: menuHeight,
+          opacity: menuOpen ? 1 : 0,
+        }}
+      >
+        <div className="bg-forest border-b-2 border-copper">
           <nav className="mx-auto max-w-7xl px-6 py-6">
             <ul className="space-y-4">
-              {['Shop All', 'About', 'Field Reports', 'Contact'].map(
-                (item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
-                      className="block font-data text-sm tracking-[0.15em] text-linen uppercase hover:text-copper transition-colors"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ),
-              )}
+              <li>
+                <button
+                  className="block font-data text-sm tracking-[0.15em] text-linen uppercase hover:text-copper transition-colors"
+                  onClick={() => {
+                    onCollectionChange('all');
+                    setMenuOpen(false);
+                  }}
+                >
+                  Shop All
+                </button>
+              </li>
+              {['About', 'Field Reports', 'Contact'].map((item) => (
+                <li key={item}>
+                  <a
+                    href="/"
+                    className="block font-data text-sm tracking-[0.15em] text-linen uppercase hover:text-copper transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
-      )}
+      </div>
     </header>
   );
 }
@@ -147,7 +172,8 @@ function FilterPill({
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 rounded-full px-4 py-1.5 min-h-[44px] inline-flex items-center font-data text-[13px] tracking-[0.12em] uppercase transition-colors snap-start
+      aria-pressed={active}
+      className={`shrink-0 rounded-full px-4 py-1.5 min-h-[44px] inline-flex items-center font-data text-[13px] tracking-[0.12em] uppercase transition-colors snap-start focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2
         ${
           active
             ? 'bg-forest text-linen'

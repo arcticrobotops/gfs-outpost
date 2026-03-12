@@ -42,6 +42,23 @@ export interface ShopifyCollection {
   handle: string;
 }
 
+/** Full product detail returned by getProductByHandle (includes description, variants, etc.) */
+export interface ShopifyProductDetail extends ShopifyProduct {
+  description: string;
+  descriptionHtml: string;
+  variants: {
+    edges: Array<{
+      node: {
+        id: string;
+        title: string;
+        availableForSale: boolean;
+        price: ShopifyPrice;
+        selectedOptions: Array<{ name: string; value: string }>;
+      };
+    }>;
+  };
+}
+
 // Feed card types
 export type FeedCardType = 'product' | 'editorial' | 'text-moment';
 

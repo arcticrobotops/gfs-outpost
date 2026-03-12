@@ -56,11 +56,6 @@ html {
   color: var(--color-linen);
 }
 
-::-moz-selection {
-  background-color: var(--color-copper);
-  color: var(--color-linen);
-}
-
 /* Focus ring for accessibility */
 :focus-visible {
   outline: 2px solid var(--color-copper);
@@ -83,6 +78,16 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-forest);
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .safe-area-bottom {

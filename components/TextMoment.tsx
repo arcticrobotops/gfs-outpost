@@ -43,7 +43,7 @@ export default function TextMoment({
       className={`group border-[2.5px] p-5 sm:p-6 transition-colors duration-200 hover:border-copper ${
         isForest
           ? 'bg-forest border-forest text-linen'
-          : 'bg-linen border-forest text-forest border-t-copper border-t-[2px]'
+          : 'bg-linen border-forest text-forest border-t-copper border-t-[2.5px]'
       }`}
     >
       {/* Header */}

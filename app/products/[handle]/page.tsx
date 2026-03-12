@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { getProductByHandle, getProducts } from '@/lib/shopify';
+import { hashHandle, formatPrice } from '@/lib/utils';
 import ProductDetail from '@/components/ProductDetail';
 import ProductImageGallery from '@/components/ProductImageGallery';
 import PDPSkeleton from '@/components/PDPSkeleton';
@@ -64,12 +65,6 @@ export default async function ProductPage({
   const hasVariants = product.variants.edges.length > 1;
   const anyAvailable = product.variants.edges.some((v) => v.node.availableForSale);
 
-  // Derive item number from handle hash
-  function hashHandle(str: string): number {
-    let h = 0;
-    for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
-    return Math.abs(h);
-  }
   const itemNo = String((hashHandle(handle) % 999) + 1).padStart(3, '0');
 
   // Related items
@@ -200,7 +195,7 @@ export default async function ProductPage({
                       value={
                         hasVariants && maxPrice !== price
                           ? `$${Math.round(price)}\u2013$${Math.round(maxPrice)}`
-                          : `$${price % 1 === 0 ? price.toFixed(0) : price.toFixed(2)}`
+                          : formatPrice(price)
                       }
                       highlight
                     />

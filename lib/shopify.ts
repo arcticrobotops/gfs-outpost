@@ -1,4 +1,4 @@
-import { ShopifyProduct, ShopifyCollection, ShopifyPrice } from '@/types/shopify';
+import { ShopifyProduct, ShopifyProductDetail, ShopifyCollection } from '@/types/shopify';
 
 const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!;
 const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN!;
@@ -180,9 +180,9 @@ const PRODUCT_BY_HANDLE_QUERY = `
   }
 `;
 
-export async function getProductByHandle(handle: string): Promise<ShopifyProduct & { description: string; descriptionHtml: string; variants: { edges: Array<{ node: { id: string; title: string; availableForSale: boolean; price: ShopifyPrice; selectedOptions: Array<{ name: string; value: string }> } }> } } | null> {
+export async function getProductByHandle(handle: string): Promise<ShopifyProductDetail | null> {
   const data = await shopifyFetch<{
-    productByHandle: (ShopifyProduct & { description: string; descriptionHtml: string; variants: { edges: Array<{ node: { id: string; title: string; availableForSale: boolean; price: ShopifyPrice; selectedOptions: Array<{ name: string; value: string }> } }> } }) | null;
+    productByHandle: ShopifyProductDetail | null;
   }>(PRODUCT_BY_HANDLE_QUERY, { handle });
 
   return data.productByHandle;

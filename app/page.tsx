@@ -1,4 +1,5 @@
 import { getProducts, getCollections } from '@/lib/shopify';
+import { ShopifyProduct, ShopifyCollection } from '@/types/shopify';
 import FeedLayout from '@/components/FeedLayout';
 import HeroSection from '@/components/HeroSection';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -6,8 +7,8 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 export const revalidate = 60;
 
 export default async function Home() {
-  let products: any[] = [];
-  let collections: any[] = [];
+  let products: ShopifyProduct[] = [];
+  let collections: ShopifyCollection[] = [];
 
   try {
     const [productsData, collectionsData] = await Promise.all([

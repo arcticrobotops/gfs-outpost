@@ -93,7 +93,7 @@ export default function FeedLayout({
     feedItems.push(
       <div key={product.id} className="feed-item">
         <ErrorBoundary>
-          <ProductCard product={product} index={i} />
+          <ProductCard product={product} />
         </ErrorBoundary>
       </div>,
     );

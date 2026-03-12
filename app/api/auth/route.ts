@@ -1,20 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const PASSWORD = process.env.SITE_PASSWORD || 'gfsctest';
+const PASSWORD = process.env.SITE_PASSWORD;
 const COOKIE_NAME = 'site-auth';
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Validate that `next` is a safe relative path (starts with `/`, not `//`). */
+function sanitizeNext(raw: string | null): string {
+  if (!raw || !raw.startsWith('/') || raw.startsWith('//')) return '/';
+  return raw;
+}
+
 export async function GET(request: NextRequest) {
-  const next = request.nextUrl.searchParams.get('next') || '/';
+  const next = sanitizeNext(request.nextUrl.searchParams.get('next'));
   return new NextResponse(loginHTML(next), {
     headers: { 'Content-Type': 'text/html' },
   });
 }
 
 export async function POST(request: NextRequest) {
+  if (!PASSWORD) {
+    return new NextResponse(loginHTML('/', 'Site password is not configured'), {
+      status: 500,
+      headers: { 'Content-Type': 'text/html' },
+    });
+  }
+
   try {
     const formData = await request.formData();
     const password = formData.get('password') as string;
-    const next = formData.get('next') as string || '/';
+    const next = sanitizeNext(formData.get('next') as string);
 
     if (password === PASSWORD) {
       const response = NextResponse.redirect(new URL(next, request.url));
@@ -40,6 +62,9 @@ export async function POST(request: NextRequest) {
 }
 
 function loginHTML(next: string, error?: string) {
+  const safeNext = escapeHtml(next);
+  const safeError = error ? escapeHtml(error) : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,9 +138,9 @@ function loginHTML(next: string, error?: string) {
   <div class="container">
     <p class="brand">Ghost Forest Surf Club</p>
     <h1>Enter Password</h1>
-    ${error ? `<p class="error">${error}</p>` : ''}
+    ${safeError ? `<p class="error">${safeError}</p>` : ''}
     <form method="POST" action="/api/auth">
-      <input type="hidden" name="next" value="${next}" />
+      <input type="hidden" name="next" value="${safeNext}" />
       <input type="password" name="password" placeholder="Password" autofocus required />
       <button type="submit">Enter</button>
     </form>

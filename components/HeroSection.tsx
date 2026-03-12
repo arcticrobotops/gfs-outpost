@@ -25,9 +25,9 @@ export default function HeroSection() {
             </p>
             <div className="h-px w-8 sm:w-12 bg-copper/80" />
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold text-linen tracking-wide leading-tight max-w-2xl">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold text-linen tracking-wide leading-tight max-w-2xl">
             Coldwater Goods from the Edge
-          </h2>
+          </h1>
           <p className="mt-4 font-body text-sm sm:text-base text-linen/70 max-w-lg leading-relaxed">
             Surf essentials tested in the cold waters of the Pacific Northwest. Built for dawn patrols and ghost forest sessions.
           </p>

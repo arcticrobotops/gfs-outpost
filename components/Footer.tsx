@@ -32,21 +32,36 @@ export default function Footer() {
           {/* Bottom links */}
           <div className="mt-10 pt-6 border-t border-linen/10 w-full max-w-md">
             <div className="flex items-center justify-center gap-4 sm:gap-6 flex-wrap">
-              {['Shop', 'About', 'Contact', 'Returns'].map((link) => (
-                <a
-                  key={link}
-                  href="#"
-                  className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
-                >
-                  {link}
-                </a>
-              ))}
+              <a
+                href="/"
+                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
+              >
+                Shop
+              </a>
+              <a
+                href="/"
+                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
+              >
+                About
+              </a>
+              <a
+                href="/"
+                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
+              >
+                Contact
+              </a>
+              <a
+                href="/"
+                className="font-data text-[13px] tracking-[0.15em] text-linen/50 uppercase hover:text-copper transition-colors"
+              >
+                Returns
+              </a>
             </div>
           </div>
 
           {/* Copyright */}
           <p className="mt-6 font-data text-[13px] tracking-[0.1em] text-linen/30 uppercase">
-            &copy; 2024 Ghost Forest Surf Club. All rights reserved.
+            &copy; {new Date().getFullYear()} Ghost Forest Surf Club. All rights reserved.
           </p>
         </div>
       </div>
