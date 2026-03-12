@@ -88,7 +88,7 @@ export default function Navbar({
       {/* Category filter bar */}
       <div className="bg-linen border-b-2 border-forest/20">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
             <span className="shrink-0 font-data text-xs tracking-[0.2em] text-sage uppercase mr-1 hidden sm:inline">
               Filter:
             </span>
@@ -147,7 +147,7 @@ function FilterPill({
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 rounded-full px-4 py-1.5 font-data text-xs tracking-[0.12em] uppercase transition-all
+      className={`shrink-0 rounded-full px-4 py-1.5 min-h-[44px] inline-flex items-center font-data text-xs tracking-[0.12em] uppercase transition-colors snap-start
         ${
           active
             ? 'bg-forest text-linen'

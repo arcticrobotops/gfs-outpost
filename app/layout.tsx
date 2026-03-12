@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -22,6 +22,11 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ["300", "400", "500"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "Ghost Forest Surf Club — Outpost",
@@ -61,6 +66,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+      </head>
       <body
         className={`${playfairDisplay.variable} ${dmSans.variable} ${ibmPlexMono.variable} antialiased`}
       >

@@ -81,3 +81,7 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-forest);
 }
+
+.safe-area-bottom {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
