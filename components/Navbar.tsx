@@ -34,7 +34,7 @@ export default function Navbar({
             {/* Menu button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
+              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors min-h-[44px] min-w-[44px]"
               aria-label="Toggle menu"
             >
               <svg
@@ -61,7 +61,7 @@ export default function Navbar({
 
             {/* Bag button */}
             <button
-              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors"
+              className="flex items-center gap-1.5 font-data text-[13px] tracking-[0.15em] text-forest uppercase hover:text-copper transition-colors min-h-[44px] min-w-[44px]"
               aria-label="Shopping bag"
             >
               <span className="hidden sm:inline">Bag</span>
