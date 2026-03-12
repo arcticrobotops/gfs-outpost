@@ -19,7 +19,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       href={`/products/${product.handle}`}
       className="group block"
     >
-      <article className="border-[2.5px] border-forest bg-linen transition-colors duration-200 group-hover:border-copper overflow-hidden">
+      <article className="border-[2.5px] border-forest bg-linen transition-[color,box-shadow] duration-200 group-hover:border-copper group-hover:shadow-[0_4px_16px_rgba(27,58,45,0.12)] overflow-hidden">
         {/* Product image */}
         <div className="relative aspect-[3/4] overflow-hidden bg-sage/10">
           {image ? (
