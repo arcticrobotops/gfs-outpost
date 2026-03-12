@@ -1,39 +1,78 @@
 import { ShopifyProduct, ShopifyProductDetail, ShopifyCollection } from '@/types/shopify';
 
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
+// Lazy-initialized environment variables to avoid module-scope throws
+// that crash the entire page when a cold start occurs before env vars propagate.
+let _domain: string | null = null;
+let _token: string | null = null;
+
+function getDomain(): string {
+  if (!_domain) {
+    const value = process.env.SHOPIFY_STORE_DOMAIN;
+    if (!value) throw new Error('SHOPIFY_STORE_DOMAIN environment variable is required');
+    _domain = value;
   }
-  return value;
+  return _domain;
 }
 
-const domain = requireEnv('SHOPIFY_STORE_DOMAIN');
-const storefrontAccessToken = requireEnv('SHOPIFY_STOREFRONT_ACCESS_TOKEN');
+function getToken(): string {
+  if (!_token) {
+    const value = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+    if (!value) throw new Error('SHOPIFY_STOREFRONT_ACCESS_TOKEN environment variable is required');
+    _token = value;
+  }
+  return _token;
+}
 
-const endpoint = `https://${domain}/api/2024-10/graphql.json`;
+function getEndpoint(): string {
+  return `https://${getDomain()}/api/2024-10/graphql.json`;
+}
+
+const MAX_RETRIES = 3;
+const RETRY_DELAYS = [500, 1000, 2000]; // exponential backoff
+const FETCH_TIMEOUT_MS = 10_000; // 10 second timeout
 
 async function shopifyFetch<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
-    },
-    body: JSON.stringify({ query, variables }),
-  });
+  let lastError: Error | null = null;
 
-  if (!response.ok) {
-    throw new Error(`Shopify API error: ${response.status} ${response.statusText}`);
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+      const response = await fetch(getEndpoint(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Storefront-Access-Token': getToken(),
+        },
+        body: JSON.stringify({ query, variables }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeout);
+
+      if (!response.ok) {
+        throw new Error(`Shopify API error: ${response.status} ${response.statusText}`);
+      }
+
+      const json = await response.json();
+
+      if (json.errors) {
+        throw new Error(`Shopify GraphQL error: ${JSON.stringify(json.errors)}`);
+      }
+
+      return json.data;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      console.error(`Shopify fetch attempt ${attempt + 1}/${MAX_RETRIES} failed:`, lastError.message);
+
+      if (attempt < MAX_RETRIES - 1) {
+        await new Promise((resolve) => setTimeout(resolve, RETRY_DELAYS[attempt]));
+      }
+    }
   }
 
-  const json = await response.json();
-
-  if (json.errors) {
-    throw new Error(`Shopify GraphQL error: ${JSON.stringify(json.errors)}`);
-  }
-
-  return json.data;
+  throw lastError || new Error('Shopify fetch failed after all retries');
 }
 
 const PRODUCTS_QUERY = `
