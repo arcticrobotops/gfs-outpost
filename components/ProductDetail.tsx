@@ -43,7 +43,7 @@ export default function ProductDetail({
       {hasVariants && (
         <div className="border-[2.5px] border-forest/30">
           <div className="bg-forest/5 px-4 py-2 border-b border-forest/15">
-            <h3 className="font-data text-xs tracking-[0.25em] text-forest/60 uppercase">
+            <h3 className="font-data text-xs tracking-[0.15em] sm:tracking-[0.25em] text-forest/60 uppercase">
               Select Option
             </h3>
           </div>
@@ -90,7 +90,7 @@ export default function ProductDetail({
           href={shopifyUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`block w-full font-data text-xs tracking-[0.25em] uppercase text-center py-4 border-[2.5px] transition-colors duration-200 ${
+          className={`block w-full font-data text-xs tracking-[0.15em] sm:tracking-[0.25em] uppercase text-center py-4 border-[2.5px] transition-colors duration-200 ${
             isAvailable
               ? 'bg-forest text-linen border-forest hover:bg-copper hover:border-copper'
               : 'bg-forest/20 text-forest/40 border-forest/20 cursor-not-allowed pointer-events-none'
@@ -115,7 +115,7 @@ export default function ProductDetail({
             href={shopifyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`shrink-0 font-data text-xs tracking-[0.2em] uppercase px-6 py-3 border-[2px] transition-colors duration-200 ${
+            className={`shrink-0 font-data text-xs tracking-[0.1em] sm:tracking-[0.2em] uppercase px-6 py-3 border-[2px] transition-colors duration-200 ${
               isAvailable
                 ? 'bg-forest text-linen border-forest hover:bg-copper hover:border-copper'
                 : 'bg-forest/20 text-forest/40 border-forest/20 pointer-events-none'

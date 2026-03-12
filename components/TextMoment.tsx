@@ -49,7 +49,7 @@ export default function TextMoment({
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
         <div className="h-px flex-1 bg-copper" />
-        <h3 className="font-data text-xs tracking-[0.2em] uppercase shrink-0 text-copper">
+        <h3 className="font-data text-xs tracking-[0.1em] sm:tracking-[0.2em] uppercase shrink-0 text-copper">
           {header}
         </h3>
         <div className="h-px flex-1 bg-copper" />

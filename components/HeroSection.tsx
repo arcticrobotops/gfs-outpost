@@ -20,7 +20,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 flex flex-col items-center justify-end pb-10 sm:pb-14 md:pb-16 px-4 text-center">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px w-8 sm:w-12 bg-copper/80" />
-            <p className="font-data text-xs tracking-[0.3em] text-copper uppercase">
+            <p className="font-data text-xs tracking-[0.15em] sm:tracking-[0.3em] text-copper uppercase">
               Station 45&deg;N &mdash; Neskowin, Oregon
             </p>
             <div className="h-px w-8 sm:w-12 bg-copper/80" />
@@ -34,7 +34,7 @@ export default function HeroSection() {
           <div className="mt-6">
             <a
               href="#inventory"
-              className="inline-block font-data text-xs tracking-[0.25em] uppercase px-8 py-3 border-[2px] border-linen/40 text-linen hover:bg-linen/10 transition-colors duration-200"
+              className="inline-block font-data text-xs tracking-[0.15em] sm:tracking-[0.25em] uppercase px-8 py-3 border-[2px] border-linen/40 text-linen hover:bg-linen/10 transition-colors duration-200"
             >
               Browse Inventory
             </a>
